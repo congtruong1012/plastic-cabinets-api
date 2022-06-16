@@ -25,7 +25,7 @@ const UserController = {
     } catch (error) {
       next(error);
     }
-  }
+  },
 };
 
 module.exports = UserController;

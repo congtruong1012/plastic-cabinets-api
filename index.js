@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/user.route");
 const authRoutes = require("./routes/auth.route");
 const categoryRoutes = require("./routes/category.route");
+const productRoutes = require("./routes/product.route");
 const { verifyToken, verifyRole } = require("./middleware/verify");
 require("dotenv").config();
 
@@ -37,7 +38,8 @@ connectDB();
 
 app.use("/api/user", verifyToken, userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/sys/category", verifyToken, categoryRoutes);
+app.use("/api/sys/category", categoryRoutes);
+app.use("/api/sys/product", productRoutes);
 app.get("/api/test", verifyToken, (req, res) => {
   res.json({
     message: "ok",

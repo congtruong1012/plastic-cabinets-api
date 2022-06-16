@@ -1,6 +1,13 @@
 // Create user
-GET http://localhost:4000/api/user/list 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTIxMmQ2ZWEyMjA3ZmY0ZWFjNWRlNyIsImlhdCI6MTY1NDg3MDEwMCwiZXhwIjoxNjU0ODczNzAwfQ.ppZrqb_vJQZVyjQh_chSCyzEPvzutQCdXfXT1l35Lpk
+POST http://localhost:4000/api/user/create 
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTIxMmQ2ZWEyMjA3ZmY0ZWFjNWRlNyIsImlhdCI6MTY1NDg3MDEwMCwiZXhwIjoxNjU0ODczNzAwfQ.ppZrqb_vJQZVyjQh_chSCyzEPvzutQCdXfXT1l35Lpk
+{
+  "email": "congtruong@gmail.com",
+  "password": "e10adc3949ba59abbe56e057f20f883e",
+  "fullname:": "Công Trương",
+  "avatar": "https://test-media.hahalolo.com/2022/05/19/03/32/bbe0c6b015617962a12c1ce8ac201bb3-1652931134_autoxauto_high.jpg.webp",
+  "role": 1
+}
 ###
 // Login
 POST http://localhost:4000/api/auth/login

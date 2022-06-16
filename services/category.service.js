@@ -8,10 +8,11 @@ const createCategory = async (body) => {
 };
 
 const getAllCaetories = async (params) => {
-  const { limit = 10, skip = 0, name } = params;
+  const { limit = 10, page = 1, name } = params;
+  console.log("getAllCaetories ~ page", (page - 1) * limit);
   return await Category.find({ name: new RegExp(name, "i") })
     .limit(limit)
-    .skip(skip);
+    .skip((page - 1) * limit);
 };
 
 const getCategory = async (id) => {
