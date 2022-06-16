@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+const multer = require("multer");
 const userRoutes = require("./routes/user.route");
 const authRoutes = require("./routes/auth.route");
 const categoryRoutes = require("./routes/category.route");
@@ -12,6 +14,8 @@ const { verifyToken, verifyRole } = require("./middleware/verify");
 require("dotenv").config();
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(
   cors({
@@ -24,7 +28,7 @@ app.use(cookieParser("plastic-cabinets"));
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.DB_URL, {
+     mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -55,6 +59,28 @@ app.use((err, req, res, next) => {
     status: err.status || 500,
     message: err.message || "Internal Server Error",
   });
+});
+
+// handle upload file
+// SET STORAGE
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+//Uploading multiple files
+app.post("/upload", upload.array("myFiles", 12), (req, res, next) => {
+  const files = req.files;
+  if (!files) {
+    return next(createError.BadRequest("Please choose files"));
+  }
+  res.send(files);
 });
 
 const PORT = process.env.PORT || 3000;

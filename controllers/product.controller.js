@@ -1,4 +1,5 @@
 const createHttpError = require("http-errors");
+const ObjectId = require("mongoose").Types.ObjectId;
 const { productSchema } = require("../middleware/validate/product.validate");
 const productService = require("../services/product.service");
 
@@ -45,7 +46,9 @@ const ProductController = {
 
   getAll: async (req, res, next) => {
     try {
-      const { sort } = req.query;
+      const { sort, category } = req.query;
+      if (category && !ObjectId.isValid(category))
+        throw createHttpError.BadRequest("Invalid category id");
       if (sort && !["asc", "desc"].includes(sort))
         throw createHttpError.BadRequest("Sort must be asc or desc");
       const categories = await productService.getAllProducts(req.query);

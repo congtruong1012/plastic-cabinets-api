@@ -15,8 +15,8 @@ const createProduct = async (body) => {
 };
 
 const getAllProducts = async (params) => {
-  const { limit = 10, page = 1, name, sort } = params;
-  return await Product.find({ name: new RegExp(name, "i") })
+  const { limit = 10, page = 1, name, category, sort } = params;
+  return await Product.find({ name: new RegExp(name, "i"), category })
     .sort({ price: sort })
     .skip(limit * (page - 1))
     .limit(limit);
