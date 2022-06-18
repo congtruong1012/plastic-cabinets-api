@@ -6,14 +6,23 @@ const productService = require("../services/product.service");
 const ProductController = {
   creUpd: async (req, res, next) => {
     try {
-      const { id, name, description, price, discount, images, category } =
-        req.body;
+      const {
+        id,
+        name,
+        description,
+        price,
+        discount,
+        images,
+        typeProd,
+        category,
+      } = req.body;
       const { error } = productSchema({
         name,
         description,
         price,
         discount,
         images,
+        typeProd,
         category,
       });
       if (error) throw createHttpError.BadRequest(error.details[0].message);
@@ -24,6 +33,7 @@ const ProductController = {
           price,
           discount,
           images,
+          typeProd,
           category,
         });
         return res.status(200).json(product);
@@ -35,6 +45,7 @@ const ProductController = {
           price,
           discount,
           images,
+          typeProd,
           category,
         });
         return res.status(200).json(product);
@@ -46,13 +57,15 @@ const ProductController = {
 
   getAll: async (req, res, next) => {
     try {
-      const { sort, category } = req.query;
+      const { sort, category, typeProd } = req.query;
       if (category && !ObjectId.isValid(category))
         throw createHttpError.BadRequest("Invalid category id");
       if (sort && !["asc", "desc"].includes(sort))
         throw createHttpError.BadRequest("Sort must be asc or desc");
-      const categories = await productService.getAllProducts(req.query);
-      return res.status(200).json(categories);
+      if (typeProd && ![0, 1, 2].includes(+typeProd))
+        throw createHttpError.BadRequest("Invalid TypeProd value");
+      const products = await productService.getAllProducts(req.query);
+      return res.status(200).json(products);
     } catch (error) {
       next(error);
     }

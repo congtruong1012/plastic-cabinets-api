@@ -2,35 +2,38 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const Product = new Schema(
+const Order = new Schema(
   {
-    name: {
+    code: {
       type: String,
       required: true,
     },
-    description: {
+    customerId: {
       type: String,
+      ref: "user",
       required: true,
     },
-    price: {
+    detail: {
+      type: [
+        {
+          product: {
+            type: Schema.Types.ObjectId,
+            ref: "product",
+          },
+          quantity: {
+            type: Number,
+            required: true,
+          },
+        },
+      ],
+      required: true,
+    },
+    totalPrice: {
       type: Number,
       required: true,
     },
-    discount: {
+    status: {
       type: Number,
-      required: true,
-    },
-    images: {
-      type: [String],
-      required: true,
-    },
-    typeProd: {
-      type: Number,
-      required: true,
-    },
-    category: {
-      type: Schema.Types.ObjectId,
-      ref: "category",
       required: true,
     },
   },
@@ -39,14 +42,12 @@ const Product = new Schema(
   }
 );
 
-Product.set("toJSON", {
+Order.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: function (doc, ret) {
     delete ret._id;
-    delete ret.createdAt;
-    delete ret.updatedAt;
   },
 });
 
-module.exports = mongoose.model("product", Product);
+module.exports = mongoose.model("order", Order);
