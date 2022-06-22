@@ -6,6 +6,9 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const fs = require("fs");
+
 const userRoutes = require("./routes/user.route");
 const authRoutes = require("./routes/auth.route");
 const categoryRoutes = require("./routes/category.route");
@@ -58,6 +61,12 @@ app.get("/api/test", verifyToken, (req, res) => {
 });
 
 // handle upload file
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
 // SET STORAGE
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -72,13 +81,27 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 //Uploading multiple files
-app.post("/upload", upload.array("myFiles", 12), (req, res, next) => {
+app.post("/upload", upload.array("myFiles", 12), async (req, res, next) => {
   try {
     const files = req.files;
     if (!files) {
       throw createError.BadRequest("Please choose files");
     }
-    res.send(files);
+    const list = [];
+    files.map((file) =>
+      cloudinary.uploader
+        .upload(file.path, { folder: "image" })
+        .then((result) => {
+          if (result) {
+            fs.unlinkSync(file);
+            list.push({
+              url: result.secure_url,
+              id: result.public_id,
+            });
+          }
+        })
+    );
+    return res.send(list);
   } catch (error) {
     next(error);
   }
