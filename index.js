@@ -12,7 +12,7 @@ const productRoutes = require("./routes/product.route");
 const orderRoutes = require("./routes/order.route");
 const uploadRoutes = require("./routes/upload.route");
 const { verifyToken, verifyRole } = require("./middleware/verify");
-require("./utils/connectDB");
+require("./utils/connectDB")();
 require("dotenv").config();
 
 const app = express();

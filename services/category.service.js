@@ -9,10 +9,12 @@ const createCategory = async (body) => {
 
 const getAllCaetories = async (params) => {
   const { limit = 10, page = 1, name } = params;
-  console.log("getAllCaetories ~ page", (page - 1) * limit);
-  return await Category.find({ name: new RegExp(name, "i") })
+  const data = await Category.find({ name: new RegExp(name, "i") })
     .limit(limit)
-    .skip((page - 1) * limit);
+    .skip((page - 1) * limit)
+    .sort({ createdAt: -1 });
+  const total = await Category.count({ name: new RegExp(name, "i") });
+  return { data, meta: { page, total } };
 };
 
 const getCategory = async (id) => {
