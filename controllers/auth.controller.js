@@ -17,7 +17,6 @@ const AuthController = {
         throw createError.BadRequest(error.details[0].message);
       }
       const user = await authService.login(req.body);
-      console.log('login: ~ user', user);
       const accessToken = tokenService.generateToken({ id: user._id });
       const refreshToken = await tokenService.generateRefreshToken({
         id: user._id,

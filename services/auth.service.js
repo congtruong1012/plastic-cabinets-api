@@ -5,21 +5,26 @@ const tokenModel = require("../models/token.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const login = async (body) => {
-  try {
-    const { email, password } = body;
-    const user = await userModel.findOne({ email });
-    if (!user) throw createHttpError.NotFound("Tài khoản không tồn tại");
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw createHttpError.BadRequest("Mật khẩu không đúng");
-    return user;
-  } catch (err) {
-    console.log(err);
+  const { email, password } = body;
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    throw createHttpError.NotFound("Tài khoản không tồn tại");
+    return;
   }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw createHttpError.BadRequest("Mật khẩu không đúng");
+    return;
+  }
+  return user;
 };
 
 const getCurrentUser = async (id) => {
   const user = await userModel.findById({ _id: new ObjectId(id) });
-  if (!user) throw createHttpError.NotFound("Tài khoản không tồn tại");
+  if (!user) {
+    throw createHttpError.NotFound("Tài khoản không tồn tại");
+    return;
+  }
   return user;
 };
 
