@@ -63,7 +63,7 @@ const ProductController = {
       if (sort && !["asc", "desc"].includes(sort))
         throw createHttpError.BadRequest("Sort must be asc or desc");
       if (typeProd && ![0, 1, 2].includes(+typeProd))
-        throw createHttpError.BadRequest("Invalid TypeProd value");
+        throw createHttpError.BadRequest("Invalid typeProd value");
       const products = await productService.getAllProducts(req.query);
       return res.status(200).json(products);
     } catch (error) {

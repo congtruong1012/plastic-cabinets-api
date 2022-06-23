@@ -34,11 +34,6 @@ app.use("/api/sys/category", categoryRoutes);
 app.use("/api/sys/product", verifyToken, productRoutes);
 app.use("/api/sys/order", verifyToken, orderRoutes);
 app.use("/upload", uploadRoutes);
-app.get("/api/test", verifyToken, (req, res) => {
-  res.json({
-    message: "ok",
-  });
-});
 
 app.use((req, res, next) => {
   next(createError.NotFound());

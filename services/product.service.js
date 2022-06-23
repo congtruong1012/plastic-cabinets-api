@@ -16,14 +16,18 @@ const createProduct = async (body) => {
 
 const getAllProducts = async (params) => {
   const { limit = 10, page = 1, name, typeProd, category, sort } = params;
-  return await Product.find({
+  const filter = {
     name: new RegExp(name, "i"),
     ...(category ? { category } : {}),
     ...(typeProd ? { typeProd } : {}),
-  })
+  };
+  const data = await Product.find(filter)
     .sort({ price: sort })
     .skip(limit * (page - 1))
-    .limit(limit);
+    .limit(limit)
+    .sort({ createdAt: -1 });
+  const total = await Product.count(filter);
+  return { data, meta: { page, total } };
 };
 
 const getProduct = async (id) => {

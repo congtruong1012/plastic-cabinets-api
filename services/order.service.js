@@ -1,3 +1,4 @@
+const { startOfDay, endOfDay } = require("date-fns");
 const Order = require("../models/order.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -17,10 +18,16 @@ const getNewestOrder = async () => {
   return await Order.find({}).sort({ createdAt: -1 });
 };
 
-const getDashboardOrder = (params) => {
+const getDashboardOrder = ({ from, to }) => {
   return Promise.all(
     [1, 2, 3, 4].map(async (item) => {
-      return await Order.count({ status: item });
+      return await Order.count({
+        status: item,
+        createdAt: {
+          $gte: startOfDay(new Date(from)),
+          $lte: endOfDay(new Date(to)),
+        },
+      });
     })
   );
 };

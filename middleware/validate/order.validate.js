@@ -1,3 +1,4 @@
+const { isValid } = require("date-fns");
 const Joi = require("joi");
 
 /**
@@ -25,4 +26,24 @@ const orderSchema = (data) => {
   return order.validate(data);
 };
 
-module.exports = { orderSchema };
+const dashboardSchema = (data) => {
+  const dashboard = Joi.object({
+    from: Joi.string()
+      .required()
+      .custom((value, helper) => {
+        return !isValid(new Date(value)) || value === null
+          ? helper.message("Invalid from date")
+          : true;
+      }),
+    to: Joi.string()
+      .required()
+      .custom((value, helper) => {
+        return !isValid(new Date(value)) || value === null
+          ? helper.message("Invalid to date")
+          : true;
+      }),
+  });
+  return dashboard.validate(data);
+};
+
+module.exports = { orderSchema, dashboardSchema };

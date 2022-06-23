@@ -1,5 +1,8 @@
 const createHttpError = require("http-errors");
-const { orderSchema } = require("../middleware/validate/order.validate");
+const {
+  orderSchema,
+  dashboardSchema,
+} = require("../middleware/validate/order.validate");
 const orderService = require("../services/order.service");
 
 const OrderController = {
@@ -39,7 +42,12 @@ const OrderController = {
 
   getDashboardOrder: async (req, res, next) => {
     try {
-      const dashboard = await orderService.getDashboardOrder();
+      const { from, to } = req.query;
+      const { error } = dashboardSchema({ from, to });
+      if (error) {
+        throw createHttpError.BadRequest(error.details[0].message);
+      }
+      const dashboard = await orderService.getDashboardOrder({ from, to });
       return res.status(200).json(dashboard);
     } catch (error) {
       next(error);
