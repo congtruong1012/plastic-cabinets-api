@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const url = require("url");
 const qs = require("query-string");
+const listEndpoints = require("express-list-endpoints");
 
 const userRoutes = require("./routes/user.route");
 const authRoutes = require("./routes/auth.route");
@@ -67,6 +68,10 @@ app.use((err, req, res, next) => {
     message: err.message || "Internal Server Error",
   });
 });
+
+console.log(
+  listEndpoints(app).map((route) => `[Mapped] ${route.path} - ${route.methods}`).join('\n')
+);
 
 const PORT = process.env.PORT || 3000;
 

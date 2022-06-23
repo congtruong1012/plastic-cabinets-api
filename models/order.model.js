@@ -33,6 +33,7 @@ const Order = new Schema(
       required: true,
     },
     status: {
+      // 1: Chờ xác nhận 2: Xác nhận 3: Đã giao 4: Đã hủy
       type: Number,
       required: true,
     },
