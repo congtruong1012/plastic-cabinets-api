@@ -62,7 +62,7 @@ const ProductController = {
         throw createHttpError.BadRequest("Invalid category id");
       if (sort && !["asc", "desc"].includes(sort))
         throw createHttpError.BadRequest("Sort must be asc or desc");
-      if (typeProd && ![0, 1, 2].includes(+typeProd))
+      if (typeProd && ![1, 2, 3].includes(+typeProd))
         throw createHttpError.BadRequest("Invalid typeProd value");
       const products = await productService.getAllProducts(req.query);
       return res.status(200).json(products);

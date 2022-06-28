@@ -2,7 +2,8 @@ const Product = require("../models/product.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const createProduct = async (body) => {
-  const { name, description, price, discount, images, category } = body;
+  const { name, description, price, discount, images, category, typeProd } =
+    body;
   const product = new Product({
     name,
     description,
@@ -10,6 +11,7 @@ const createProduct = async (body) => {
     discount,
     images,
     category,
+    typeProd,
   });
   return await product.save();
 };
@@ -22,6 +24,7 @@ const getAllProducts = async (params) => {
     ...(typeProd ? { typeProd } : {}),
   };
   const data = await Product.find(filter)
+    .populate("category")
     .sort({ price: sort })
     .skip(limit * (page - 1))
     .limit(limit)

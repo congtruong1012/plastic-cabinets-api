@@ -7,7 +7,11 @@ const createCategory = async (body) => {
   return await category.save();
 };
 
-const getAllCaetories = async (params) => {
+const getAllCatetories = async () => {
+  return await Category.find();
+};
+
+const getListCatetories = async (params) => {
   const { limit = 10, page = 1, name } = params;
   const data = await Category.find({ name: new RegExp(name, "i") })
     .limit(limit)
@@ -33,7 +37,8 @@ const deleteCategory = async (id) => {
 
 module.exports = {
   createCategory,
-  getAllCaetories,
+  getListCatetories,
+  getAllCatetories,
   getCategory,
   updateCategory,
   deleteCategory,

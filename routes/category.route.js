@@ -4,7 +4,8 @@ const categoryController = require("../controllers/category.controller");
 const router = express.Router();
 
 router.post("/cre-upd", categoryController.creUpd);
-router.get("/list", categoryController.getAll);
+router.get("/list", categoryController.getList);
+router.get("/all", categoryController.getAll);
 router.get("/detail", categoryController.get);
 router.post("/delete", categoryController.delete);
 
