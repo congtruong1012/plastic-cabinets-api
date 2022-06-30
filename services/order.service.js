@@ -15,7 +15,16 @@ const createOrder = async (body) => {
 };
 
 const getNewestOrder = async () => {
-  return await Order.find({}).sort({ createdAt: -1 });
+  return await Order.find({}).limit(10)
+    .sort({ createdAt: -1 })
+    .populate({
+      path: "customerId",
+      select: "fullName",
+    })
+    .populate({
+      path: "detail.product",
+      select: "name price discount",
+    });
 };
 
 const getDashboardOrder = ({ from, to }) => {
