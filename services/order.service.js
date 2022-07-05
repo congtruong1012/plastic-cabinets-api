@@ -15,10 +15,10 @@ const eTotal = {
 };
 
 const createOrder = async (body) => {
-  const { code, customerId, detail, totalPrice, status } = body;
+  const { code, customer, detail, totalPrice, status } = body;
   const order = new Order({
     code,
-    customerId,
+    customer,
     detail,
     totalPrice,
     status,
@@ -26,9 +26,46 @@ const createOrder = async (body) => {
   return await order.save();
 };
 
+const getListOrder = async ({ limit = 10, page = 1, code, date, status }) => {
+  const filter = {
+    ...(code ? { code } : {}),
+    ...(status ? { status } : {}),
+    ...(date
+      ? {
+          createdAt: {
+            $gte: startOfDay(new Date(date)),
+            $lte: endOfDay(new Date(date)),
+          },
+        }
+      : {}),
+  };
+  const data = await Order.find(filter)
+    .populate({
+      path: "detail.product",
+      select: "name price discount images",
+    })
+    .populate({
+      path: "customer",
+      select: "fullName",
+    })
+    .limit(limit)
+    .skip(limit * (page - 1))
+    .sort({ createdAt: -1 });
+
+  const total = await Order.count(filter);
+
+  return {
+    data,
+    meta: {
+      page: +page,
+      total,
+    },
+  };
+};
+
 const getNewestOrder = async () => {
   return await Order.find({}).limit(10).sort({ createdAt: -1 }).populate({
-    path: "customerId",
+    path: "customer",
     select: "fullName",
   });
 };
@@ -75,7 +112,7 @@ const getTurnoverOrder = ({ from, to }) => {
     })
   ).then((res) =>
     res.reduce((cur, item, index) => {
-      cur[eTotal[index + 1]] = _get(item, '[0].total', 0);
+      cur[eTotal[index + 1]] = _get(item, "[0].total", 0);
       return cur;
     }, {})
   );
@@ -86,4 +123,5 @@ module.exports = {
   getNewestOrder,
   getDashboardOrder,
   getTurnoverOrder,
+  getListOrder,
 };

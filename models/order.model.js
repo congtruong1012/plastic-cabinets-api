@@ -8,7 +8,7 @@ const Order = new Schema(
       type: String,
       required: true,
     },
-    customerId: {
+    customer: {
       type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
@@ -47,8 +47,6 @@ Order.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: function (doc, ret) {
-    ret.customer = ret.customerId;
-    delete ret.customerId;
     delete ret._id;
   },
 });

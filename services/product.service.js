@@ -30,7 +30,7 @@ const getAllProducts = async (params) => {
     .limit(limit)
     .sort({ createdAt: -1 });
   const total = await Product.count(filter);
-  return { data, meta: { page, total } };
+  return { data, meta: { page: +page, total } };
 };
 
 const getProduct = async (id) => {

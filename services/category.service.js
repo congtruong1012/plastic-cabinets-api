@@ -18,7 +18,7 @@ const getListCatetories = async (params) => {
     .skip((page - 1) * limit)
     .sort({ createdAt: -1 });
   const total = await Category.count({ name: new RegExp(name, "i") });
-  return { data, meta: { page, total } };
+  return { data, meta: { page: +page, total } };
 };
 
 const getCategory = async (id) => {
