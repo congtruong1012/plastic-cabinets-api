@@ -53,9 +53,9 @@ DEBUG [${format(new Date(), "yyyy-MM-dd hh:mm:ss")}]:
 
 app.use("/api/user", verifyToken, userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/sys/category", categoryRoutes);
+app.use("/api/sys/category", verifyToken, categoryRoutes);
 app.use("/api/sys/product", verifyToken, productRoutes);
-app.use("/api/sys/order", orderRoutes);
+app.use("/api/sys/order", verifyToken, orderRoutes);
 app.use("/upload", uploadRoutes);
 
 app.use((req, res, next) => {
@@ -70,7 +70,9 @@ app.use((err, req, res, next) => {
 });
 
 console.log(
-  listEndpoints(app).map((route) => `[Mapped] ${route.path} - ${route.methods}`).join('\n')
+  listEndpoints(app)
+    .map((route) => `[Mapped] ${route.path} - ${route.methods}`)
+    .join("\n")
 );
 
 const PORT = process.env.PORT || 3000;

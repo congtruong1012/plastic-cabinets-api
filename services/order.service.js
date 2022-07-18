@@ -1,6 +1,7 @@
 const { startOfDay, endOfDay } = require("date-fns");
 const Order = require("../models/order.model");
 const _get = require("lodash/get");
+const createHttpError = require("http-errors");
 
 const eStatus = {
   1: "waiting",
@@ -26,15 +27,22 @@ const createOrder = async (body) => {
   return await order.save();
 };
 
-const getListOrder = async ({ limit = 10, page = 1, code, date, status }) => {
+const getListOrder = async ({
+  limit = 10,
+  page = 1,
+  code,
+  from,
+  to,
+  status,
+}) => {
   const filter = {
     ...(code ? { code } : {}),
     ...(status ? { status } : {}),
-    ...(date
+    ...(from && to
       ? {
           createdAt: {
-            $gte: startOfDay(new Date(date)),
-            $lte: endOfDay(new Date(date)),
+            $gte: startOfDay(new Date(from)),
+            $lte: endOfDay(new Date(to)),
           },
         }
       : {}),
@@ -118,10 +126,43 @@ const getTurnoverOrder = ({ from, to }) => {
   );
 };
 
+const confirmOrder = async (code) => {
+  const order = await Order.findOne({ code });
+  if (!order) throw createHttpError.NotFound("Order not found");
+  if (order.status !== 1)
+    throw createHttpError.BadRequest("Order is not waiting");
+  order.status = 2;
+  await order.save();
+  return { data: { code, status: 2 } };
+};
+
+const cancelOrder = async (code) => {
+  const order = await Order.findOne({ code });
+  if (!order) throw createHttpError.NotFound("Order not found");
+  if (order.status !== 1)
+    throw createHttpError.BadRequest("Order is not waiting");
+  order.status = 4;
+  await order.save();
+  return { data: { code, status: 4 } };
+};
+
+const deliverOrder = async (code) => {
+  const order = await Order.findOne({ code });
+  if (!order) throw createHttpError.NotFound("Order not found");
+  if (order.status !== 2)
+    throw createHttpError.BadRequest("Order is not confirmed");
+  order.status = 3;
+  await order.save();
+  return { data: { code, status: 2 } };
+};
+
 module.exports = {
   createOrder,
   getNewestOrder,
   getDashboardOrder,
   getTurnoverOrder,
   getListOrder,
+  confirmOrder,
+  cancelOrder,
+  deliverOrder,
 };

@@ -4,6 +4,7 @@ const _format = require("date-fns/format");
 const {
   orderSchema,
   dashboardSchema,
+  filterOrderSchema,
 } = require("../middleware/validate/order.validate");
 const orderService = require("../services/order.service");
 const { isValid } = require("date-fns");
@@ -45,18 +46,23 @@ const OrderController = {
 
   getListOrder: async (req, res, next) => {
     try {
-      const { limit = 10, page = 1, code, date, status } = req.query;
-      if (date && !isValid(new Date(date)))
-        throw createHttpError.BadRequest("Invalid date");
-      if (status && ![1, 2, 3, 4].includes(status))
-        throw createHttpError.BadRequest("Invalid status value");
-      const orders = await orderService.getListOrder({
+      const { limit = 10, page = 1, code, from, to, status } = req.query;
+      const params = {
         limit,
         page,
         code,
-        date,
+        from,
+        to,
+        status,
+      };
+      const { error } = filterOrderSchema({
+        code,
+        from,
+        to,
         status,
       });
+      if (error) throw createHttpError.BadRequest(error.details[0].message);
+      const orders = await orderService.getListOrder(params);
       return res.status(200).json(orders);
     } catch (error) {
       next(error);
@@ -85,6 +91,40 @@ const OrderController = {
       }
       const turnover = await orderService.getTurnoverOrder({ from, to });
       return res.status(200).json(turnover);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  confirmOrder: async (req, res, next) => {
+    try {
+      const { code } = req.body;
+      console.log('confirmOrder: ~ code', code);
+      if (!code) throw createHttpError.BadRequest("Code is required");
+      const order = await orderService.confirmOrder(code);
+      return res.status(200).json(order);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  cancelOrder: async (req, res, next) => {
+    try {
+      const { code } = req.body;
+      if (!code) throw createHttpError.BadRequest("Code is required");
+      const order = await orderService.cancelOrder(code);
+      return res.status(200).json(order);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  deliverOrder: async (req, res, next) => {
+    try {
+      const { code } = req.body;
+      if (!code) throw createHttpError.BadRequest("Code is required");
+      const order = await orderService.deliverOrder(code);
+      return res.status(200).json(order);
     } catch (error) {
       next(error);
     }
