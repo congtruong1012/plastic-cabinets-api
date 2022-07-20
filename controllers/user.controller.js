@@ -19,7 +19,7 @@ const UserController = {
 
   get: async (req, res, next) => {
     try {
-      const user = await userService.getUser();
+      const user = await userService.getUser(req.query);
 
       return res.status(200).json(user);
     } catch (error) {
