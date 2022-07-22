@@ -32,11 +32,25 @@ const verifyRole = async (req, res, next) => {
     next(createError.Unauthorized());
     return;
   }
-  if (user.role === 0) {
-    next(createError.Forbidden("Bạn không có quyền truy cập"));
+  if ((1)[(0, 1)].includes(user.role)) {
+    next(createError.Forbidden());
     return;
   }
   next();
 };
 
-module.exports = { verifyToken, verifyRole };
+const verifyRoleAdmin = async (req, res, next) => {
+  const id = req.user;
+  const user = await userModel.findById({ _id: new ObjectId(id) });
+  if (!user) {
+    next(createError.Unauthorized());
+    return;
+  }
+  if (user.role !== 1) {
+    next(createError.Forbidden());
+    return;
+  }
+  next();
+};
+
+module.exports = { verifyToken, verifyRole, verifyRoleAdmin };
