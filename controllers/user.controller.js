@@ -26,6 +26,32 @@ const UserController = {
       next(error);
     }
   },
+
+  setRoleMember: async (req, res, next) => {
+    try {
+      if (!req.body.id) {
+        throw createError.BadRequest("Id is required");
+        return;
+      }
+      const user = await userService.setRoleMember(req.body.id);
+      return res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  removeRoleMember: async (req, res, next) => {
+    try {
+      if (!req.body.id) {
+        throw createError.BadRequest("Id is required");
+        return;
+      }
+      const user = await userService.removeRoleMember(req.body.id);
+      return res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
 };
 
 module.exports = UserController;

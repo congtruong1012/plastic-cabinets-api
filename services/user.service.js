@@ -1,5 +1,6 @@
 const userModel = require("../models/user.model");
 const bcrypt = require("bcryptjs");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const createUser = async (body) => {
   const { password, ...other } = body;
@@ -31,4 +32,27 @@ const getUser = async ({ limit = 10, page = 1, username, role }) => {
   };
 };
 
-module.exports = { createUser, getUser };
+const setRoleMember = async (id) => {
+  return await userModel.findByIdAndUpdate(
+    { _id: new ObjectId(id) },
+    {
+      role: 0,
+    },
+    {
+      returnOriginal: false,
+    }
+  );
+};
+
+const removeRoleMember = async (id) => {
+  return await userModel.findByIdAndUpdate(
+    { _id: new ObjectId(id) },
+    {
+      role: -1,
+    },
+    {
+      returnOriginal: false,
+    }
+  );
+};
+module.exports = { createUser, getUser, setRoleMember, removeRoleMember };
