@@ -22,7 +22,6 @@ require("dotenv").config();
 
 const app = express();
 
-console.log('end', app.get("env"));
 
 app.use(express.static(path.join(__dirname, "/public")));
 
@@ -89,6 +88,9 @@ console.log(
 );
 
 const PORT = process.env.PORT || 3000;
+
+console.log("end", app.get("env"));
+
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
