@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: '*',
     credentials: true, //Để bật cookie HTTP qua CORS
   })
 );
