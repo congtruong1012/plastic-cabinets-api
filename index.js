@@ -22,7 +22,6 @@ require("dotenv").config();
 
 const app = express();
 
-
 app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(
@@ -34,34 +33,32 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser("plastic-cabinets"));
 
-if (app.get("env") === "development") {
-  app.use((req, res, next) => {
-    const send = res.send;
+app.use((req, res, next) => {
+  const send = res.send;
 
-    res.send = (data) => {
-      const msg = `
+  res.send = (data) => {
+    const msg = `
 DEBUG [${format(new Date(), "yyyy-MM-dd hh:mm:ss")}]:
 --------------------[${req.method}][${res.statusCode}]----------------------
 [HEADERS]: ${JSON.stringify(req.headers)}
 [URL]: ${decodeURIComponent(
-        url.format({
-          protocol: req.protocol,
-          host: req.get("host"),
-          pathname: req.originalUrl,
-        })
-      )}
+      url.format({
+        protocol: req.protocol,
+        host: req.get("host"),
+        pathname: req.originalUrl,
+      })
+    )}
 [BODY PAYLOAD]: ${JSON.stringify(req.body)}
 [BODY DATA]: ${JSON.stringify(data)}
 `;
-      logEvent(msg);
-      res.send = send; // this line is important not to have an infinite loop
+    logEvent(msg);
+    res.send = send; // this line is important not to have an infinite loop
 
-      return res.send(data);
-    };
+    return res.send(data);
+  };
 
-    next();
-  });
-}
+  next();
+});
 
 app.use("/api/user", verifyToken, userRoutes);
 app.use("/api/auth", authRoutes);
@@ -90,7 +87,6 @@ console.log(
 const PORT = process.env.PORT || 3000;
 
 console.log("end", app.get("env"));
-
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
