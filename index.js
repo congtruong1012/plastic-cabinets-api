@@ -60,7 +60,7 @@ DEBUG [${format(new Date(), "yyyy-MM-dd hh:mm:ss")}]:
   next();
 });
 
-app.use("/api/user", verifyToken, userRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/sys/category", verifyToken, categoryRoutes);
 app.use("/api/sys/product", verifyToken, productRoutes);
