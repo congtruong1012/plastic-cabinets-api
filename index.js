@@ -31,7 +31,7 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-app.use(cookieParser("plastic-cabinets"));
+app.use(cookieParser(process.env.KEY_COOKIE));
 
 app.use((req, res, next) => {
   const send = res.send;
