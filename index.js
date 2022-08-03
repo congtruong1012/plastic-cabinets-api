@@ -60,6 +60,8 @@ DEBUG [${format(new Date(), "yyyy-MM-dd hh:mm:ss")}]:
   next();
 });
 
+console.log("env", process.env);
+
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/sys/category", verifyToken, categoryRoutes);
