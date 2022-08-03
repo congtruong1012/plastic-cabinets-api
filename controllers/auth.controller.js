@@ -26,12 +26,14 @@ const AuthController = {
         httpOnly: true,
         signed: true,
         maxAge: EXPIRE_COOKIE,
+        secure: process.env.NODE_ENV === "production",
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         signed: true,
         maxAge: EXPIRE_COOKIE,
+        secure: process.env.NODE_ENV === "production",
       });
 
       return res.status(200).json({
