@@ -53,14 +53,13 @@ DEBUG [${format(new Date(), "yyyy-MM-dd hh:mm:ss")}]:
 `;
     logEvent(msg);
     res.send = send; // this line is important not to have an infinite loop
+    console.log("env", process.env);
 
     return res.send(data);
   };
 
   next();
 });
-
-console.log("env", process.env);
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
