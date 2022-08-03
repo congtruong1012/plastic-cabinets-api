@@ -8,7 +8,7 @@ const userModel = require("../../models/user.model");
 const verifyToken = (req, res, next) => {
   try {
     const token = req.signedCookies.accessToken;
-    console.log('verifyToken ~ token', token);
+    console.log("verifyToken ~ token", req.signedCookies);
     if (!token) {
       next(createError.Unauthorized());
       return;
