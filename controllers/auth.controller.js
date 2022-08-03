@@ -22,6 +22,12 @@ const AuthController = {
         id: user._id,
       });
 
+      console.log(
+        "AuthController ~ user",
+        process.env.NODE_ENV,
+        process.env.NODE_ENV === "production"
+      );
+
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         signed: true,
