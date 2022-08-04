@@ -22,7 +22,7 @@ const AuthController = {
         httpOnly: true,
         signed: true,
         maxAge: EXPIRE_COOKIE,
-        sameSite: process.env.NODE_ENV === "production" ? true : "none",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : true,
         secure: process.env.NODE_ENV === "production",
       });
 
