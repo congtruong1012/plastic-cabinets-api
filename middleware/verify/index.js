@@ -8,13 +8,11 @@ const userModel = require("../../models/user.model");
 const verifyToken = (req, res, next) => {
   try {
     const token = req.signedCookies.accessToken;
-    console.log("verifyToken ~ token", req.signedCookies);
     if (!token) {
       next(createError.Unauthorized());
       return;
     }
     jwt.verify(token, process.env.SCRET_TOKEN, (err, decoded) => {
-      console.log('jwt.verify ~ err', err);
       if (err) {
         next(createError.Unauthorized(err.name));
         return;

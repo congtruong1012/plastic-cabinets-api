@@ -1,8 +1,6 @@
 const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
-const {
-  EXPIRE_COOKIE,
-} = require("../constants");
+const { EXPIRE_COOKIE } = require("../constants");
 const { login } = require("../middleware/validate/auth.validate");
 const authService = require("../services/auth.service");
 const tokenService = require("../services/token.service");
@@ -20,16 +18,11 @@ const AuthController = {
         id: user._id,
       });
 
-      console.log(
-        "AuthController ~ user",
-        process.env.NODE_ENV,
-        process.env.NODE_ENV === "production"
-      );
-
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         signed: true,
         maxAge: EXPIRE_COOKIE,
+        sameSite: process.env.NODE_ENV === "production" ? true : "none",
         secure: process.env.NODE_ENV === "production",
       });
 
@@ -37,6 +30,7 @@ const AuthController = {
         httpOnly: true,
         signed: true,
         maxAge: EXPIRE_COOKIE,
+        sameSite: process.env.NODE_ENV === "production" ? true : "none",
         secure: process.env.NODE_ENV === "production",
       });
 
