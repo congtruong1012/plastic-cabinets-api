@@ -1,8 +1,6 @@
 const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
 const {
-  EXPIRE_ACCESS_TOKEN,
-  EXPIRE_REFRESH_TOKEN,
   EXPIRE_COOKIE,
 } = require("../constants");
 const { login } = require("../middleware/validate/auth.validate");
