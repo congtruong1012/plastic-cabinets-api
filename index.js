@@ -30,7 +30,8 @@ app.use(cookieParser(process.env.KEY_COOKIE));
 app.use(
   cors({
     origin: process.env.URL_CLIENT,
-    credentials: true, //Để bật cookie HTTP qua CORS
+    credentials: true, //Để bật cookie HTTP qua CORS,
+    allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
   })
 );
 app.use((req, res, next) => {
