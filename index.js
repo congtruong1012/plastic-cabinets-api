@@ -31,7 +31,7 @@ app.use(
   cors({
     origin: process.env.URL_CLIENT,
     credentials: true, //Để bật cookie HTTP qua CORS,
-    allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+    preflightContinue: true,
   })
 );
 app.use((req, res, next) => {
