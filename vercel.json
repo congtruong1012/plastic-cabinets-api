@@ -1,9 +1,12 @@
 {
   "version": 2,
+  "scripts": {
+    "build": "node build --output public"
+  },
   "builds": [
     {
       "src": "index.js",
-      "use": "@now/node"
+      "use": "@vercel/node"
     }
   ]
 }
