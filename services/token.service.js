@@ -3,6 +3,7 @@ const { EXPIRE_ACCESS_TOKEN, EXPIRE_REFRESH_TOKEN } = require("../constants");
 const tokenModel = require("../models/token.model");
 
 const generateToken = (payload) => {
+  // 
   const token = jwt.sign(payload, process.env.SCRET_TOKEN, {
     expiresIn: EXPIRE_ACCESS_TOKEN,
   });
