@@ -1,12 +1,15 @@
 {
   "version": 2,
-  "scripts": {
-    "build": "node build --output public"
-  },
   "builds": [
     {
-      "src": "index.js",
+      "src": "./index.js",
       "use": "@vercel/node"
+    }
+  ],
+  "routers": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
     }
   ]
 }
