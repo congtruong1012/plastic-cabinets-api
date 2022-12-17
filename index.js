@@ -33,33 +33,36 @@ app.use(
     credentials: true, //Để bật cookie HTTP qua CORS,
   })
 );
-app.use((req, res, next) => {
-  const send = res.send;
 
-  res.send = (data) => {
-    const msg = `
+if (process.env.NODE_ENV !== "production") {
+  app.use((req, res, next) => {
+    const send = res.send;
+
+    res.send = (data) => {
+      const msg = `
 DEBUG [${format(new Date(), "yyyy-MM-dd hh:mm:ss")}]:
 --------------------[${req.method}][${res.statusCode}]----------------------
 [HEADERS]: ${JSON.stringify(req.headers)}
 [URL]: ${decodeURIComponent(
-      url.format({
-        protocol: req.protocol,
-        host: req.get("host"),
-        pathname: req.originalUrl,
-      })
-    )}
+        url.format({
+          protocol: req.protocol,
+          host: req.get("host"),
+          pathname: req.originalUrl,
+        })
+      )}
 [BODY PAYLOAD]: ${JSON.stringify(req.body)}
 [BODY DATA]: ${JSON.stringify(data)}
 `;
-    logEvent(msg);
-    res.send = send; // this line is important not to have an infinite loop
-    console.log("env", process.env);
+      logEvent(msg);
+      res.send = send; // this line is important not to have an infinite loop
+      console.log("env", process.env);
 
-    return res.send(data);
-  };
+      return res.send(data);
+    };
 
-  next();
-});
+    next();
+  });
+}
 
 app.use("/api/user", verifyRole, userRoutes);
 app.use("/api/auth", authRoutes);
