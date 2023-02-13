@@ -21,7 +21,6 @@ require("./utils/connectDB")();
 require("dotenv").config();
 
 const app = express();
-
 app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(bodyParser.json());
@@ -55,7 +54,6 @@ DEBUG [${format(new Date(), "yyyy-MM-dd hh:mm:ss")}]:
 `;
       logEvent(msg);
       res.send = send; // this line is important not to have an infinite loop
-      console.log("env", process.env);
 
       return res.send(data);
     };
@@ -90,7 +88,6 @@ console.log(
 
 const PORT = process.env.PORT || 3000;
 
-console.log("end", app.get("env"));
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

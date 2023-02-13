@@ -28,7 +28,6 @@ const OrderController = {
         totalPrice,
         status,
       });
-      console.log("createOrder: ~ order", order);
       return res.status(200).json(order);
     } catch (error) {
       next(error);
@@ -99,7 +98,6 @@ const OrderController = {
   confirmOrder: async (req, res, next) => {
     try {
       const { code } = req.body;
-      console.log('confirmOrder: ~ code', code);
       if (!code) throw createHttpError.BadRequest("Code is required");
       const order = await orderService.confirmOrder(code);
       return res.status(200).json(order);
