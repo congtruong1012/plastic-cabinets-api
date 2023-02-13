@@ -20,7 +20,7 @@ const User = new Schema(
       type: String,
     },
     role: {
-      type: Number, // 2: admin 1: member 0: user,
+      type: Number, // 1: admin 0: member -1: user,
       default: 0,
     },
   },

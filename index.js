@@ -62,7 +62,7 @@ DEBUG [${format(new Date(), "yyyy-MM-dd hh:mm:ss")}]:
   });
 }
 
-app.use("/api/user", verifyRole, userRoutes);
+app.use("/api/user", verifyToken, verifyRole, userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/sys/category", verifyToken, categoryRoutes);
 app.use("/api/sys/product", verifyToken, productRoutes);
@@ -87,7 +87,6 @@ console.log(
 );
 
 const PORT = process.env.PORT || 3000;
-
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

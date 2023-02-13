@@ -32,7 +32,7 @@ const verifyRole = async (req, res, next) => {
     next(createError.Unauthorized());
     return;
   }
-  if ((1)[(0, 1)].includes(user.role)) {
+  if (![0, 1].includes(user.role)) {
     next(createError.Forbidden());
     return;
   }
