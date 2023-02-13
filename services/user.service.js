@@ -15,7 +15,7 @@ const createUser = async (body) => {
 
 const getUser = async ({ limit = 10, page = 1, username, role }) => {
   const filter = {
-    username: new RegExp(username, "g"),
+    email: new RegExp(username, "g"),
     ...(role ? { role } : {}),
   };
   const users = await userModel
